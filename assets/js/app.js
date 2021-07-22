@@ -25,7 +25,7 @@ var chartGroup = svg.append("g")
 d3.csv("data.csv").then(function(data){
 
 // Initial Params
-var chosenXAxis = "income";
+var chosenXAxis = "poverty";
 
 // function used for updating x-scale var upon click on axis label
 function xScale(data, chosenXAxis) {
@@ -42,7 +42,7 @@ function xScale(data, chosenXAxis) {
 
 // function used for updating xAxis var upon click on axis label
 function renderAxes(newXScale, xAxis) {
-  var bottomAxis = d3.axisBottom(newXScale); // bottomAxis is the final x-axis var
+  var bottomAxis = d3.axisBottom(newXScale); 
 
   xAxis.transition()
     .duration(1000)
@@ -51,12 +51,7 @@ function renderAxes(newXScale, xAxis) {
   return xAxis;
 }
 
-// **** Above REDRAWS the x-axis SCALE based on mouse-click of labels on x-axis ******
-
-
-// function used for updating circles group with a transition to
-// new circles  **** chosenXAxis below  is either hair_length or num_albums  **** 
-
+// function used for updating circles group with a transition to new circles
 function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
   circlesGroup.transition()
