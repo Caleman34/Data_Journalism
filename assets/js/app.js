@@ -13,7 +13,7 @@ var height = svgHeight - margin.top - margin.bottom;
 
 // Create an SVG wrapper
 var svg = d3
-  .select(".chart")
+  .select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -21,8 +21,6 @@ var svg = d3
 // Append an SVG group
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-d3.csv("data.csv").then(function(data){
 
 // Initial Params
 var chosenXAxis = "poverty";
@@ -66,8 +64,8 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 
   var label;
 
-  if (chosenXAxis === "hair_length") {
-    label = "Hair Length:";
+  if (chosenXAxis === "poverty") {
+    label = "State:";
   }
   else {
     label = "# of Albums:";
@@ -77,7 +75,7 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     .attr("class", "tooltip")
     .offset([80, -60])
     .html(function(d) {
-      return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>${d.income} ${d[chosenXAxis]}`);
     });
 
   circlesGroup.call(toolTip);
@@ -94,22 +92,22 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 }
 
 // Retrieve data from the CSV file and execute everything below
-d3.csv("hairData.csv").then(function(hairData, err) {
+d3.csv("data.csv").then(function(data, err) {
   if (err) throw err;
 
   // parse data
-  hairData.forEach(function(data) {
-    data.hair_length = +data.hair_length;
-    data.num_hits = +data.num_hits;
-    data.num_albums = +data.num_albums;
+  data.forEach(function(data) {
+    data.income = +data.income;
+    data.poverty = +data.poverty;
+    data.healthcare = +data.healthcare;
   });
 
   // xLinearScale function above csv import
-  var xLinearScale = xScale(hairData, chosenXAxis);
+  var xLinearScale = xScale(data, chosenXAxis);
 
   // Create y scale function
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(hairData, d => d.num_hits)])
+    .domain([0, d3.max(data, d => d.healthcare)])
     .range([height, 0]);
 
   // Create initial axis functions
@@ -128,11 +126,11 @@ d3.csv("hairData.csv").then(function(hairData, err) {
 
   // append initial circles
   var circlesGroup = chartGroup.selectAll("circle")
-    .data(hairData)
+    .data(data)
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.num_hits))
+    .attr("cy", d => yLinearScale(d.poverty))
     .attr("r", 20)
     .attr("fill", "pink")
     .attr("opacity", ".5");
@@ -181,7 +179,7 @@ d3.csv("hairData.csv").then(function(hairData, err) {
 
         // functions here found above csv import
         // updates x scale for new data
-        xLinearScale = xScale(hairData, chosenXAxis);
+        xLinearScale = xScale(data, chosenXAxis);
 
         // updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
@@ -193,7 +191,7 @@ d3.csv("hairData.csv").then(function(hairData, err) {
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
         // changes classes to change bold text
-        if (chosenXAxis === "num_albums") {
+        if (chosenXAxis === "poverty") {
           albumsLabel
             .classed("active", true)
             .classed("inactive", false);
@@ -214,4 +212,3 @@ d3.csv("hairData.csv").then(function(hairData, err) {
 }).catch(function(error) {
   console.log(error);
 });
-};
