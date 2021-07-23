@@ -30,17 +30,13 @@ var chosenXAxis = "poverty";
 function xScale(demData, chosenXAxis) {
   // create scales on the x-axis
   var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(demData, d => d[chosenXAxis]) * 0.8,  // setting the left x-axis val to smaller than smallest data point
-      d3.max(demData, d => d[chosenXAxis]) * 1.2 // setting the right x-axis val to larger than largest ''
+    .domain([d3.min(demData, d => d[chosenXAxis] - .5), d3.max(demData, d => d[chosenXAxis])
     ])
     .range([0, width]);
 
   return xLinearScale;
 
 }
-
-// ******* Above is to use SCALING to set x-axis DOMAIN & RANGE  ******************
-
 
 // function used for updating xAxis var upon click on axis label
 function renderAxes(newXScale, xAxis) {
@@ -52,12 +48,6 @@ function renderAxes(newXScale, xAxis) {
 
   return xAxis;
 }
-
-// **** Above REDRAWS the x-axis SCALE based on mouse-click of labels on x-axis ******
-
-
-// function used for updating circles group with a transition to
-// new circles  **** chosenXAxis below  is either hair_length or num_albums  **** 
 
 function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
@@ -73,11 +63,11 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 
   var label;
 
-  if (chosenXAxis === "hair_length") {
-    label = "Hair Length:";
+  if (chosenXAxis === "poverty") {
+    label = "POverty:";
   }
   else {
-    label = "# of Albums:";
+    label = "poverty else:";
   }
 
   var toolTip = d3.tip()
