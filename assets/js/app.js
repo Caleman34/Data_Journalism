@@ -6,7 +6,7 @@ var margin = {
   right: 40,
   bottom: 80,
   left: 100
-};
+}
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
@@ -26,7 +26,7 @@ var chartGroup = svg.append("g")
 // create variables for default graph axis setting
 var chosenXAxis = "poverty";
 var chosenYAxis = "healthcare";
-var radius = 10
+var radius = 8
 
 // function used for updating x-scale var upon click on axis label
 function xScale(demData, chosenXAxis) {
@@ -46,7 +46,7 @@ function yScale(demData, chosenYAxis) {
     .domain([d3.min(demData, d => d[chosenYAxis]) * 0.8,
     d3.max(demData, d => d[chosenYAxis]) * 1.1
     ])
-    .range([0, width]);
+    .range([height, 0]);
   return yLinearScale;
 };
 
@@ -124,7 +124,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, labelsGroup) {
   labelsGroup.on("mouseover", function (data) {
     toolTip.show(data);
   })
-    .on("mouseout", function(data, index) {
+    .on("mouseout", function (data, index) {
       toolTip.hide(data);
     });
   return labelsGroup;
