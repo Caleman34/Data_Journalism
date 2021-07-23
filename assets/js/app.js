@@ -74,7 +74,7 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     .attr("class", "tooltip")
     .offset([80, -60])
     .html(function(d) {
-      return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
     });
 
   circlesGroup.call(toolTip);
@@ -91,14 +91,14 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 }
 
 // Retrieve data from the CSV file and execute everything below
-d3.csv("Data.csv").then(function(demData, err) {
+d3.csv("data.csv").then(function(demData, err) {
   if (err) throw err;
 
   // parse data
   demData.forEach(function(data) {
     data.poverty = +data.poverty;
-    data.income = +data.income;
-    data.healthcare = +data.healthcare;
+    data.incomeMoe = +data.incomeMoe;
+    data.obesity = +data.obesity;
   });
 
   // xLinearScale function above csv import
@@ -106,7 +106,7 @@ d3.csv("Data.csv").then(function(demData, err) {
 
   // Create y scale function
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(demData, d => d.obesity)])
+    .domain([20, d3.max(demData, d => d.obesity)])
     .range([height, 0]);
 
   // Create initial axis functions
