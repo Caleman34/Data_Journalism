@@ -38,73 +38,73 @@
 
 // }
 
-// function used for updating xAxis var upon click on axis label
-function renderAxes(newXScale, xAxis) {
-  var bottomAxis = d3.axisBottom(newXScale); // bottomAxis is the final x-axis var
+// // function used for updating xAxis var upon click on axis label
+// function renderAxes(newXScale, xAxis) {
+//   var bottomAxis = d3.axisBottom(newXScale); // bottomAxis is the final x-axis var
 
-  xAxis.transition()
-    .duration(1000)
-    .call(bottomAxis);
+//   xAxis.transition()
+//     .duration(1000)
+//     .call(bottomAxis);
 
-  return xAxis;
-}
+//   return xAxis;
+// }
 
-function renderCircles(circlesGroup, newXScale, chosenXAxis) {
+// function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
-  circlesGroup.transition()
-    .duration(1000)
-    .attr("cx", d => newXScale(d[chosenXAxis]));
+//   circlesGroup.transition()
+//     .duration(1000)
+//     .attr("cx", d => newXScale(d[chosenXAxis]));
 
-  return circlesGroup;
-}
+//   return circlesGroup;
+// }
 
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, circlesGroup) {
+// function updateToolTip(chosenXAxis, circlesGroup) {
 
-  var label;
-  var label2;
+//   var label;
+//   var label2;
 
-  if (chosenXAxis === "poverty") {
-    label = "Poverty (%): ";
-    label2 = "Obesity (%): ";
-  }
-  else {
-    label = "Median Household Income:";
-  }
+//   if (chosenXAxis === "poverty") {
+//     label = "Poverty (%): ";
+//     label2 = "Obesity (%): ";
+//   }
+//   else {
+//     label = "Median Household Income:";
+//   }
 
-  var toolTip = d3.tip()
-    .attr("class", "tooltip")
-    .offset([80, -60])
-    .html(function(d) {
-      return (`${d.state}<br>${label} ${d[chosenXAxis]}<br>${label2} ${d.obesity}`);
-    });
+//   var toolTip = d3.tip()
+//     .attr("class", "tooltip")
+//     .offset([80, -60])
+//     .html(function(d) {
+//       return (`${d.state}<br>${label} ${d[chosenXAxis]}<br>${label2} ${d.obesity}`);
+//     });
 
-  circlesGroup.call(toolTip);
+//   circlesGroup.call(toolTip);
 
-  circlesGroup.on("mouseover", function(data) {
-    toolTip.show(data);
-  })
-    // onmouseout event
-    .on("mouseout", function(data, index) {
-      toolTip.hide(data);
-    });
+//   circlesGroup.on("mouseover", function(data) {
+//     toolTip.show(data);
+//   })
+//     // onmouseout event
+//     .on("mouseout", function(data, index) {
+//       toolTip.hide(data);
+//     });
 
-  return circlesGroup;
-}
+//   return circlesGroup;
+// // }
 
-// Retrieve data from the CSV file and execute everything below
-d3.csv("data.csv").then(function(demData, err) {
-  if (err) throw err;
+// // Retrieve data from the CSV file and execute everything below
+// d3.csv("assets/data/data.csv").then(function(demData, err) {
+//   if (err) throw err;
 
-  // parse data
-  demData.forEach(function(data) {
-    data.povertyMoe = +data.povertyMoe;
-    data.incomeMoe = +data.incomeMoe;
-    data.obesity = +data.obesity;
-    data.ageMoe = +data.ageMoe;
-    data.smokes = +data.smokes;
-    data.healthcare = +data.healthcare;
-  });
+//   // parse data
+//   demData.forEach(function(data) {
+//     data.poverty = +data.poverty;
+//     data.income = +data.income;
+//     data.obesity = +data.obesity;
+//     data.age = +data.age;
+//     data.smokes = +data.smokes;
+//     data.healthcare = +data.healthcare;
+//   });
 
   // xLinearScale function above csv import
   var xLinearScale = xScale(demData, chosenXAxis);
@@ -114,9 +114,9 @@ d3.csv("data.csv").then(function(demData, err) {
     .domain([20, d3.max(demData, d => d.obesity)])
     .range([height, 0]);
 
-  // Create initial axis functions
-  var bottomAxis = d3.axisBottom(xLinearScale);
-  var leftAxis = d3.axisLeft(yLinearScale);
+  // // Create initial axis functions
+  // var bottomAxis = d3.axisBottom(xLinearScale);
+  // var leftAxis = d3.axisLeft(yLinearScale);
 
   // append x axis
   var xAxis = chartGroup.append("g")
@@ -124,9 +124,9 @@ d3.csv("data.csv").then(function(demData, err) {
     .attr("transform", `translate(0, ${height})`)
     .call(bottomAxis);
 
-  // append y axis
-  chartGroup.append("g")
-    .call(leftAxis);
+  // // append y axis
+  // chartGroup.append("g")
+  //   .call(leftAxis);
 
   // append initial circles
   var circlesGroup = chartGroup.selectAll("circle")
