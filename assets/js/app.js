@@ -26,7 +26,7 @@ var chartGroup = svg.append("g")
 // create variables for default graph axis setting
 var chosenXAxis = "poverty";
 var chosenYAxis = "healthcare";
-var radius = 8
+var radius = 10
 
 // function used for updating x-scale var upon click on axis label
 function xScale(demData, chosenXAxis) {
@@ -39,10 +39,10 @@ function xScale(demData, chosenXAxis) {
 };
 
 // function used for updating y-scale var upon click on axis label
-function yScale(demData, chosenyAxis) {
+function yScale(demData, chosenYAxis) {
   // create scales on the x-axis
   var yLinearScale = d3.scaleLinear()
-    .domain([d3.min(demData, d => d[chosenYAxis] * 0.8), d3.max(demData, d => d[chosenYAxis]) * 1.2
+    .domain([d3.min(demData, d => d[chosenYAxis] * 0.8), d3.max(demData, d => d[chosenYAxis]) * 1.1
     ])
     .range([0, width]);
   return yLinearScale;
@@ -67,7 +67,7 @@ function renderYAxis(newYScale, yAxis) {
 };
 
 // function to create circles that change based on chosen axis
-function renderCircles(circlesGroup, newXScale, newYscale, chosenXAxis, chesenYAxis) {
+function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]))
@@ -76,16 +76,16 @@ function renderCircles(circlesGroup, newXScale, newYscale, chosenXAxis, chesenYA
 };
 
 // function for lables to go inside cirsles on graph
-function renderLabels(labelsGroup, newXScale, newYscale, chosenXAxis, chesenYAxis) {
+function renderLabels(labelsGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
   labelsGroup.transition()
     .duration(1000)
     .attr("x", d => newXScale(d[chosenXAxis]))
     .attr("y", d => newYScale(d[chosenYAxis]) + radius / 3);
-  return circlesGroup;
+  return labelsGroup;
 };
 
 // function for updating circles with new tooltip
-function updateToolTip(chosenXAxis, chosenYaxis, labelsGroup) {
+function updateToolTip(chosenXAxis, chosenYAxis, labelsGroup) {
   var xLabel;
   var yLabel;
 
@@ -116,6 +116,7 @@ function updateToolTip(chosenXAxis, chosenYaxis, labelsGroup) {
     .html(function (d) {
       return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`)
     });
+    
   // declare handlers
   labelsGroup.call(toolTip);
   labelsGroup.on("mouseover", function (data) {
@@ -141,7 +142,7 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
     data.healthcare = +data.healthcare;
   });
 
-  // xLinearScale function above csv import
+  // x and y LinearScale function above csv import
   var xLinearScale = xScale(demData, chosenXAxis);
   var yLinearScale = yScale(demData, chosenYAxis);
 
@@ -164,11 +165,9 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
     .append("circle")
     .classed("stateCircle", true)
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.chosenYAxis))
+    .attr("cy", d => yLinearScale(d[chosenYAxis]))
     .attr("r", radius)
-    .attr("fill", "skyblue")
-    .attr("opacity", ".8")
-    .attr("stroke", "black");
+    .attr("fill", "skyblue");
 
   // render state labels
   var labelsGroup = chartGroup.selectAll(".stateText")
@@ -179,7 +178,7 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
     .attr("x", d => xLinearScale(d[chosenXAxis]))
     .attr("y", d => yLinearScale(d[chosenYAxis + radius / 3]))
     .attr("font-size", radius)
-    .text(d => d.attr);
+    .text(d => d.abbr);
 
   // Create group for x-axis labels
   var xlabels = chartGroup.append("g")
@@ -300,7 +299,7 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
         // console.log(chosenXAxis)
 
         // functions here found above csv import
-        // updates x scale for new data
+        // updates y scale for new data
         yLinearScale = yScale(demData, chosenYAxis);
 
         // updates x axis with transition
@@ -315,22 +314,22 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
 
         // changes classes to change bold text
         switch (chosenYAxis) {
-          case "age": (
-            ageLabel.classed("active", true).classed("inactive", false),
+          case "healthcare": (
+            healthcareLabel.classed("active", true).classed("inactive", false),
             obeseLabel.classed("active", false).classed("inactive", true),
             smokesLabel.classed("active", false).classed("inactive", true)
           )
             break;
           case "smokes": (
             smokesLabel.classed("active", true).classed("inactive", false),
-            ageLabel.classed("active", false).classed("inactive", true),
+            healthcareLabel.classed("active", false).classed("inactive", true),
             obeseLabel.classed("active", false).classed("inactive", true)
           )
             break;
           case "obesity": (
             obesityLabel.classed("active", true).classed("inactive", false),
             smokesLabel.classed("active", false).classed("inactive", true),
-            ageLabel.classed("active", false).classed("inactive", true)
+            healthcareLabel.classed("active", false).classed("inactive", true)
           )
             break;
         }

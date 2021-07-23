@@ -40,7 +40,7 @@
   margin: 0;
 }
 
-.tooltip {
+.d3-tip {
   padding: 6px;
   font-size: 12px;
   line-height: 1;
