@@ -98,9 +98,12 @@ d3.csv("data.csv").then(function(demData, err) {
 
   // parse data
   demData.forEach(function(data) {
-    data.poverty = +data.poverty;
+    data.povertyMoe = +data.povertyMoe;
     data.incomeMoe = +data.incomeMoe;
     data.obesity = +data.obesity;
+    data.ageMoe = +data.ageMoe;
+    data.smokes = +data.smokes;
+    data.healthcare = +data.healthcare;
   });
 
   // xLinearScale function above csv import
@@ -193,23 +196,11 @@ d3.csv("data.csv").then(function(demData, err) {
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
         // changes classes to change bold text
-        if (chosenXAxis === "poverty") {
-          povertyLabel
-            .classed("active", true)
-            .classed("inactive", false);
-          incomeLabel
-            .classed("active", false)
-            .classed("inactive", true);
-        }
-        else {
-          povertyLabel
-            .classed("active", false)
-            .classed("inactive", true);
-          incomeLabel
-            .classed("active", true)
-            .classed("inactive", false);
-        }
-      }
+        switch (chosenXAxis){
+          case "poverty": (
+              
+          )
+        }}}
     });
 }).catch(function(error) {
   console.log(error);
