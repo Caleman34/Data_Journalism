@@ -204,11 +204,27 @@ d3.csv("data.csv").then(function(demData, err) {
 
         // changes classes to change bold text
         switch (chosenXAxis){
-          case "poverty": (
-              
-          )
-        }}}
-    });
-}).catch(function(error) {
-  console.log(error);
-});
+            case "poverty": (
+                povertyLabel.classed("active", true).classed("inactive", false),
+                ageLabel.classed("active", false).classed("inactive", true),
+                incomeLabel.classed("active", false).classed("inactive", true)
+              )
+            break;
+            case "age" : (
+              ageLabel.classed("active", true).classed("inactive", false),
+              povertyLabel.classed("active", false).classed("inactive", true),
+              incomeLabel.classed("active", false).classed("inactive", true)
+              )
+            break;
+            case "income" : (
+              incomeLabel.classed("active", true).classed("inactive", false),
+              povertyLabel.classed("active", false).classed("inactive", true),
+              ageLabel.classed("active", false).classed("inactive", true)
+              )
+            break;
+          }
+        }
+      });
+  }).catch(function(error) {
+    console.log(error);
+  });
