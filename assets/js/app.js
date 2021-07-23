@@ -88,26 +88,26 @@ function renderLabels(labelsGroup, newXScale, newYScale, chosenXAxis, chosenYAxi
 
 // function for updating circles with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, labelsGroup) {
-  var xLabel;
-  var yLabel;
+  var xLabelTool;
+  var yLabelTool;
 
   // X Axis cases
   switch (chosenXAxis) {
-    case "poverty": xLabel = "Poverty (%)";
+    case "poverty": xLabelTool = "Poverty (%)";
       break;
-    case "age": xLabel = "Age (Median)";
+    case "age": xLabelTool = "Age (Median)";
       break;
-    case "income": xLabel = "Median Household Income";
+    case "income": xLabelTool = "Median Household Income";
       break;
   }
 
   // Y Axis cases
   switch (chosenYAxis) {
-    case "healthcare": yLabel = "Lacks Healthcare (%)";
+    case "healthcare": yLabelTool = "Lacks Healthcare (%)";
       break;
-    case "smokes": yLabel = "Smokes (%)";
+    case "smokes": yLabelTool = "Smokes (%)";
       break;
-    case "obesity": yLabel = "Obesity (%)";
+    case "obesity": yLabelTool = "Obesity (%)";
       break;
   }
 
@@ -116,7 +116,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, labelsGroup) {
     .attr("class", "d3-tip")
     .offset([80, -60])
     .html(function (d) {
-      return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`)
+      return (`${d.state}<br>${xLabelTool} ${d[chosenXAxis]}<br>${yLabelTool} ${d[chosenYAxis]}`)
     });
 
   // declare handlers
@@ -124,7 +124,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, labelsGroup) {
   labelsGroup.on("mouseover", function (data) {
     toolTip.show(data);
   })
-    .on("mouseout", function (data, index) {
+    .on("mouseout", function(data, index) {
       toolTip.hide(data);
     });
   return labelsGroup;
@@ -168,8 +168,7 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
     .classed("stateCircle", true)
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("r", radius)
-    .attr("fill", "skyblue");
+    .attr("r", radius);
 
   // render state labels
   var labelsGroup = chartGroup.selectAll(".stateText")
@@ -257,8 +256,8 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
         xAxis = renderXAxis(xLinearScale, xAxis);
 
         // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        labelsGroup = renderLabels(labelsGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
+        labelsGroup = renderLabels(labelsGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // updates tooltips with new info
         labelsGroup = updateToolTip(chosenXAxis, chosenYAxis, labelsGroup);
@@ -316,19 +315,19 @@ d3.csv("assets/data/data.csv").then(function (demData, err) {
         switch (chosenYAxis) {
           case "healthcare": (
             healthcareLabel.classed("active", true).classed("inactive", false),
-            obeseLabel.classed("active", false).classed("inactive", true),
+            obesityLabel.classed("active", false).classed("inactive", true),
             smokesLabel.classed("active", false).classed("inactive", true)
           )
             break;
           case "smokes": (
             healthcareLabel.classed("active", false).classed("inactive", true),
-            obeseLabel.classed("active", false).classed("inactive", true),
+            obesityLabel.classed("active", false).classed("inactive", true),
             smokesLabel.classed("active", true).classed("inactive", false)
           )
             break;
           case "obesity": (
             healthcareLabel.classed("active", false).classed("inactive", true),
-            obeseLabel.classed("active", true).classed("inactive", false),
+            obesityLabel.classed("active", true).classed("inactive", false),
             smokesLabel.classed("active", false).classed("inactive", true)
           )
             break;
